@@ -1,0 +1,36 @@
+[
+{ "keys": ["ctrl+alt+b"], "command": "run_existing_window_command", "args":
+	{
+	    "id": "repl_python_ipython2",
+	    "file": "config/Python/Main.sublime-menu"
+	}
+	
+},
+{ "keys": ["super+alt+up"], "command": "fold" },
+{ "keys": ["super+alt+down"], "command": "unfold" },
+{ "keys": ["shift+tab"], "command": "auto_complete" },
+{ "keys": ["shift+tab"], "command": "replace_completion_with_auto_complete", "context":
+		[
+			{ "key": "last_command", "operator": "equal", "operand": "insert_best_completion" },
+			{ "key": "auto_complete_visible", "operator": "equal", "operand": false },
+			{ "key": "setting.tab_completion", "operator": "equal", "operand": true }
+		]
+	},
+	
+
+	// { "keys": ["tab"], "command": "next_field", "context":
+
+	{ "keys": ["tab"], "command": "run_macro_file", "args": {"file": "res://Packages/User/snippet_complete.sublime-macro"}, "context":
+		[
+			{ "key": "has_next_field", "operator": "equal", "operand": true }
+		]
+	},
+
+	{ "keys": ["tab"], "command": "commit_completion", "context":
+		[
+			{ "key": "auto_complete_visible" },
+			{ "key": "setting.auto_complete_commit_on_tab" }
+		]
+	},
+
+]
