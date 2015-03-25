@@ -1,0 +1,4 @@
+[
+    {"command": "next_field", "args": {}},
+    {"command": "auto_complete", "args": {}}
+]

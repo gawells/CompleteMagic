@@ -1,0 +1,18 @@
+<snippet>
+	<content><![CDATA[
+#!/bin/bash
+#SBATCH -J ${1:jobname}
+#SBATCH -o ${1:jobname}.out
+#SBATCH -e ${1:jobname}.err
+#SBATCH -n ${2:1}
+#SBATCH -p ${3:debug}
+#SBATCH -D ${4:/home/gordon/}
+#SBATCH -w ${5:hostname}
+#SBATCH --gres=gpu:${6:1}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>sbatch</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.slurm</scope>
+</snippet>
