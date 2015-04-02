@@ -12,7 +12,7 @@ import sublime
 import sublime_plugin   
 import os
 import json
-import glob
+# import glob
 
 class SnippetAutoComplete(sublime_plugin.EventListener):
     settings = None
@@ -21,12 +21,13 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
     word_list = []
 
     def should_trigger(self, scope):
-        completion_files = glob.glob("*.snippet-completions")
+        completion_files = sublime.find_resources("*.snippet-completions")
+
         for c in completion_files:
-            with open(c) as data_file :
-                compldata = json.load(data_file)
-                if compldata['scope'] in scope:
-                    return compldata
+            compldata = json.loads(sublime.load_resource(c) )
+
+            if compldata['scope'] in scope:
+                return compldata
 
         return False
 
