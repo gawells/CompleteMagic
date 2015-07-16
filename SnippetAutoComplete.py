@@ -11,14 +11,16 @@
 import sublime             
 import sublime_plugin   
 import os
+from os.path import basename
 import json
-# import glob
+import glob
 
 class SnippetAutoComplete(sublime_plugin.EventListener):
     settings = None
     b_first_edit = True
     b_fully_loaded = True
     word_list = []
+    complD = None
 
     def should_trigger(self, scope):
         completion_files = sublime.find_resources("*.snippet-completions")
@@ -27,29 +29,31 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
             compldata = json.loads(sublime.load_resource(c) )
 
             if compldata['scope'] in scope:
+                complD = compldata
                 return compldata
 
         return False
 
-    def populate_autocomplete(self,prefix,completions):  
+    def populate_autocomplete(self,prefix,completions,path=""):  
         complist = []
         for fieldname in completions['completions']:
-
-            if prefix.lower() in fieldname.lower():
+            if (fieldname.lower().startswith(prefix.lower())):
             # if prefix.lower().startswith(fieldname.lower()): # don't understand why this doesn't work after first character
                 complist = []
                 for completion in completions['completions'][fieldname]:
-                    complist.append(("%s: %s"%(fieldname,completion),completion))                    
+                    if not "*" in completion:
+                        complist.append(("%s: %s"%(fieldname,completion),completion))                    
+                    else:                        
+                        glist = glob.glob(path+"/"+completion)
+                        complist = complist + [("%s: %s"%(fieldname,basename(x)),basename(x)) for x in glist]
                 return complist
 
     def on_query_completions(self, view, prefix, locations):
-        # scope_name = sublime.windows()[0].active_view().scope_name(sublime.windows()[0].active_view().sel()[0].begin())    
-        # print (sublime.INHIBIT_WORD_COMPLETIONS)
-        # print (sublime.INHIBIT_EXPLICIT_COMPLETIONS)
         scope_name = view.scope_name(0)   
         compldata = self.should_trigger(scope_name)
+        fname = view.file_name()
+        path = os.path.dirname(fname)
 
         if compldata:           
-            print (prefix)
-            return self.populate_autocomplete(prefix,compldata)
+            return self.populate_autocomplete(prefix,compldata,path)
                     
