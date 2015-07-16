@@ -34,18 +34,22 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
     def populate_autocomplete(self,prefix,completions):  
         complist = []
         for fieldname in completions['completions']:
-            if fieldname.lower() in prefix.lower():
+
+            if prefix.lower() in fieldname.lower():
+            # if prefix.lower().startswith(fieldname.lower()): # don't understand why this doesn't work after first character
                 complist = []
                 for completion in completions['completions'][fieldname]:
                     complist.append(("%s: %s"%(fieldname,completion),completion))                    
                 return complist
 
     def on_query_completions(self, view, prefix, locations):
-        scope_name = sublime.windows()[0].active_view().scope_name(sublime.windows()[0].active_view().sel()[0].begin())       
-        # print (scope_name)
+        # scope_name = sublime.windows()[0].active_view().scope_name(sublime.windows()[0].active_view().sel()[0].begin())    
+        # print (sublime.INHIBIT_WORD_COMPLETIONS)
+        # print (sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+        scope_name = view.scope_name(0)   
         compldata = self.should_trigger(scope_name)
 
         if compldata:           
+            print (prefix)
             return self.populate_autocomplete(prefix,compldata)
-
-            
+                    
