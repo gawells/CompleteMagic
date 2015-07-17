@@ -16,14 +16,10 @@ import json
 import glob
 
 class SnippetAutoComplete(sublime_plugin.EventListener):
-    settings = None
-    b_first_edit = True
-    b_fully_loaded = True
-    word_list = []
     complD = None
 
     def should_trigger(self, scope):
-        completion_files = sublime.find_resources("*.snippet-completions")
+        completion_files = sublime.find_resources("*.snippet-completions")       
 
         for c in completion_files:
             compldata = json.loads(sublime.load_resource(c) )
@@ -38,7 +34,6 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
         complist = []
         for fieldname in completions['completions']:
             if (fieldname.lower().startswith(prefix.lower())):
-            # if prefix.lower().startswith(fieldname.lower()): # don't understand why this doesn't work after first character
                 complist = []
                 for completion in completions['completions'][fieldname]:
                     if not "*" in completion:
@@ -46,13 +41,16 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
                     else:                        
                         glist = glob.glob(path+"/"+completion)
                         complist = complist + [("%s: %s"%(fieldname,basename(x)),basename(x)) for x in glist]
+                print (complist)
                 return complist
 
     def on_query_completions(self, view, prefix, locations):
         scope_name = view.scope_name(0)   
+        print (scope_name)
         compldata = self.should_trigger(scope_name)
         fname = view.file_name()
         path = os.path.dirname(fname)
+        print (prefix)
 
         if compldata:           
             return self.populate_autocomplete(prefix,compldata,path)
