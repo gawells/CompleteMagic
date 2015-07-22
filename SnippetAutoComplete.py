@@ -18,7 +18,7 @@ import glob
 class SnippetAutoComplete(sublime_plugin.EventListener):
     complD = None
 
-    def should_trigger(self, scope):
+    def read_completions(self, scope):
         completion_files = sublime.find_resources("*.snippet-completions")       
 
         for c in completion_files:
@@ -37,7 +37,9 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
     def populate_autocomplete(self,prefix,completions,path=""):  
         complist = []
         for fieldname in completions['completions']:
-            if (fieldname.lower().startswith(prefix.lower())):
+            
+            if fieldname.lower() == prefix.lower():
+            # if (fieldname.lower().startswith(prefix.lower())):                
                 complist = []
                 globchars = set("*?[]|")
                 for completion in completions['completions'][fieldname]:
@@ -46,17 +48,26 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
                     else:                        
                         glist = glob.glob(path+"/"+completion)
                         complist = complist + [("%s: %s"%(fieldname,basename(x)),basename(x)) for x in glist]
+                # print (complist)
                 return complist
+            elif (fieldname.lower().startswith(prefix.lower())):
+                print (fieldname)
+                complist.append((fieldname,fieldname))
+        
+        # print (complist)    
+        return complist
 
                 
     def on_query_completions(self, view, prefix, locations):
         # print (self.isFile(prefix))
         scope_name = view.scope_name(0)   
-        compldata = self.should_trigger(scope_name)
+        compldata = self.read_completions(scope_name)
         fname = view.file_name()
         path = os.path.dirname(fname)
         print(prefix)
 
         if compldata:           
-            return self.populate_autocomplete(prefix,compldata,path)
+            clist = self.populate_autocomplete(prefix,compldata,path)
+            print (clist) 
+            return clist
                     
