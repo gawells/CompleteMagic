@@ -38,9 +38,9 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
         complist = []
         for fieldname in completions['completions']:
             
-            if fieldname.lower() == prefix.lower():
-            # if (fieldname.lower().startswith(prefix.lower())):                
-                complist = []
+            # if fieldname.lower() == prefix.lower():
+            # complist = []
+            if (fieldname.lower().startswith(prefix.lower())):                
                 globchars = set("*?[]|")
                 for completion in completions['completions'][fieldname]:
                     if not any((c in globchars) for c in completion) :
@@ -49,12 +49,13 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
                         glist = glob.glob(path+"/"+completion)
                         complist = complist + [("%s: %s"%(fieldname,basename(x)),basename(x)) for x in glist]
                 # print (complist)
-                return complist
-            elif (fieldname.lower().startswith(prefix.lower())):
-                print (fieldname)
-                complist.append((fieldname,fieldname))
+                # return complist
+            # elif (fieldname.lower().startswith(prefix.lower())):
+            #     print (fieldname)
+            #     complist.append((fieldname,fieldname))
         
-        # print (complist)    
+        # print (complist)  
+        complist.append(("nested","true"))  
         return complist
 
                 
@@ -68,6 +69,11 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
 
         if compldata:           
             clist = self.populate_autocomplete(prefix,compldata,path)
-            print (clist) 
+            # print (clist) 
+            # if (clist[-1][0] == "nested"):
+            #     pass
+                # how do I retrigger the popup?
+                # view.run_command("auto_complete") # crashes
+
             return clist
                     
