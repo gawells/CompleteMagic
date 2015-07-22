@@ -30,27 +30,32 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
 
         return False
 
+    def isFile(self,fname):        
+        print(fname)
+        return os.path.isfile(fname)
+
     def populate_autocomplete(self,prefix,completions,path=""):  
         complist = []
         for fieldname in completions['completions']:
             if (fieldname.lower().startswith(prefix.lower())):
                 complist = []
+                globchars = set("*?[]|")
                 for completion in completions['completions'][fieldname]:
-                    if not "*" in completion:
+                    if not any((c in globchars) for c in completion) :
                         complist.append(("%s: %s"%(fieldname,completion),completion))                    
                     else:                        
                         glist = glob.glob(path+"/"+completion)
                         complist = complist + [("%s: %s"%(fieldname,basename(x)),basename(x)) for x in glist]
-                print (complist)
                 return complist
 
+                
     def on_query_completions(self, view, prefix, locations):
+        # print (self.isFile(prefix))
         scope_name = view.scope_name(0)   
-        print (scope_name)
         compldata = self.should_trigger(scope_name)
         fname = view.file_name()
         path = os.path.dirname(fname)
-        print (prefix)
+        print(prefix)
 
         if compldata:           
             return self.populate_autocomplete(prefix,compldata,path)
