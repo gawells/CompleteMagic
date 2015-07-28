@@ -1,3 +1,4 @@
+
 # This Python file uses the following encoding: utf-8
 #-----------------------------------------------------------------------------------
 # Snippet Auto-Complete
@@ -14,6 +15,7 @@ import os
 from os.path import basename
 import json
 import glob
+import re
 
 class SnippetAutoComplete(sublime_plugin.EventListener):
     complD = None
@@ -48,6 +50,13 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
                     else:                        
                         glist = glob.glob(path+"/"+completion)
                         complist = complist + [("%s: %s"%(fieldname,basename(x)),basename(x)) for x in glist]
+
+            elif re.search('__all\w{3}',prefix):
+                ext = prefix[-3:]
+                print (path+"/*."+ext)
+                glist = glob.glob(path+"/*."+ext)
+                complist = complist + [("%s: %s"%(prefix,basename(x)),basename(x)) for x in glist]
+                print (complist)
                 # print (complist)
                 # return complist
             # elif (fieldname.lower().startswith(prefix.lower())):
