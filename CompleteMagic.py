@@ -18,7 +18,6 @@ import glob
 import re
 
 class SnippetAutoComplete(sublime_plugin.EventListener):
-    saved = False
 
     def read_completions(self, scope):
         completion_files = sublime.find_resources("*.snippet-completions")       
@@ -71,7 +70,6 @@ class SnippetAutoComplete(sublime_plugin.EventListener):
         fname = view.file_name()
         if fname:
             path = os.path.dirname(fname)
-            saved = True
         
         print(prefix)
 
