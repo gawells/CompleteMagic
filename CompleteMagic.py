@@ -1,7 +1,7 @@
 
 # This Python file uses the following encoding: utf-8
 #-----------------------------------------------------------------------------------
-# Snippet Auto-Complete
+# CompleteMagic
 #-----------------------------------------------------------------------------------
 #
 # Originally derived from DictionaryAutocomplete by (c) Florian Zinggeler
@@ -17,10 +17,10 @@ import json
 import glob
 import re
 
-class SnippetAutoComplete(sublime_plugin.EventListener):
+class CompleteMagic(sublime_plugin.EventListener):
 
     def read_completions(self, scope):
-        completion_files = sublime.find_resources("*.snippet-completions")       
+        completion_files = sublime.find_resources("*.cm-completions")       
 
         for c in completion_files:
             compldata = json.loads(sublime.load_resource(c) )

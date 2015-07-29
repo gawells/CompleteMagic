@@ -1,0 +1,27 @@
+{
+	"scope" : "source.pbs",
+	"completions" : {
+		"PBS" : ["PBS_O_QUEUE",
+		"PBS_QUEUE",
+		"PBS_JOBID",
+		"PBS_JOBNAME",
+		"PBS_NODEFILE",
+		"PBS_ARRAYID",
+		"PBS_VNODENUM",
+		"PBS_O_PATH",
+		"PBS_O_WORKDIR",
+		"PBS_NUM_PPN"],
+		"nodenumber":["1","2","4","8","16","32","64"],
+		"ppnnumber":["1","2","4","8","16","32","64"],
+		"jobtimehours":["1","2","4","8","12","24"],
+		"jobtimedays":["1","2","4","7","14","21","28"],
+		"allcfg":["*.cfg"],
+		"allmsj":["*.msj"],
+		"allcms":["*.cms"],
+		"allcpt":["*.cpt"]
+	}
+}
+
+
+
+
