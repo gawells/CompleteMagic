@@ -58,7 +58,7 @@ class CompleteMagic(sublime_plugin.EventListener):
             complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
             print (complist)
 
-        complist.append(("nested","true"))  
+        # complist.append(("nested","true"))  
         return complist
 
                 
@@ -75,6 +75,6 @@ class CompleteMagic(sublime_plugin.EventListener):
 
         if compldata:           
             clist = self.populate_autocomplete(prefix, compldata, path)
-
+            print(clist)
             return clist
                     
