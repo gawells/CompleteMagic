@@ -39,6 +39,9 @@ class CompleteMagic(sublime_plugin.EventListener):
 
     def populate_autocomplete(self, prefix, completions, path=""):  
         complist = []
+        if prefix == '':
+            return complist
+
         for fieldname in completions['completions']:
             
             if (fieldname.lower().startswith(prefix.lower())):                
@@ -71,10 +74,10 @@ class CompleteMagic(sublime_plugin.EventListener):
         if fname:
             path = os.path.dirname(fname)
         
-        print(prefix)
+        print("Prefix>"+prefix+"<EndPrefix")
 
         if compldata:           
             clist = self.populate_autocomplete(prefix, compldata, path)
-            print(clist)
+            # print(clist)
             return clist
                     
