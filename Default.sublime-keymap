@@ -1,0 +1,23 @@
+[
+	// { "keys": ["tab"], "command": "run_macro_file", "args": {"file": "res://Packages/SnippetComplete/snippet_complete.sublime-macro"}, "context":
+	// 	[
+	// 		{ "key": "has_next_field", "operator": "equal", "operand": true },
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
+	// 	]
+	// },
+
+	// { "keys": ["tab"], "command": "commit_completion", "context":
+	// 	[
+	// 		{ "key": "auto_complete_visible" },
+	// 		{ "key": "setting.auto_complete_commit_on_tab" }
+	// 	]
+	// },
+	
+	// { "keys": ["tab"], "command": "", "context":
+	// 	[
+	// 		{ "key": "auto_complete_visible" },
+	// 		{ "key": "setting.auto_complete_commit_on_tab" }
+	// 	]
+	// },
+
+]

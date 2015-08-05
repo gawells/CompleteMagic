@@ -19,6 +19,9 @@ import re
 
 class CompleteMagic(sublime_plugin.EventListener):
 
+    def init(self):
+        pass
+
     def read_completions(self, scope):
         completion_files = sublime.find_resources("*.cm-completions")       
 
