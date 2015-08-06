@@ -2,7 +2,7 @@
 	// { "keys": ["tab"], "command": "run_macro_file", "args": {"file": "res://Packages/CompleteMagic/field_complete.sublime-macro"}, "context":
 	// 	[
 	// 		{ "key": "has_next_field", "operator": "equal", "operand": true },
-	// 		{ "key": "selector", "operator": "equal", "operand": "source.pbs"},
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.shell"},
 	// 		{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"}
 	// 	]
 	// },
@@ -19,8 +19,8 @@
 	// 		{ "key": "has_prev_field", "operator": "equal", "operand": false },
 	// 		{ "key": "auto_complete_visible" },
 	// 		{ "key": "setting.auto_complete_commit_on_tab" },
-	// 		{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
-	// 		// { "key": "selector", "operator": "regex_contains", "operand": "source.pbs"}
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.shell"}
+	// 		// { "key": "selector", "operator": "regex_contains", "operand": "source.shell"}
 	// 	]
 	// },
 
