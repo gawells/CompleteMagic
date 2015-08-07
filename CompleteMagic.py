@@ -25,9 +25,8 @@ class CommitNextFieldCommand(sublime_plugin.TextCommand):
         self.view.run_command("auto_complete", {})
 
 
-class CommitFirstFieldCommand(sublime_plugin.TextCommand):
+class TabIntoSnippetCommand(sublime_plugin.TextCommand):
     def run(self,edit):
-        print("*****************************First Field")
         self.view.run_command("commit_completion", {})
         self.view.run_command("auto_complete", {'disable_auto_insert': True})
 

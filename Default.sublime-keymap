@@ -25,7 +25,7 @@
 	// 	]
 	// },
 
-	{ "keys": ["tab"], "command": "commit_first_field", "context":
+	{ "keys": ["tab"], "command": "tab_into_snippet", "context":
 		[
 			{ "key": "has_prev_field", "operator": "equal", "operand": false },
 			// Prevent triggering of second autocomplete when last inserted word
