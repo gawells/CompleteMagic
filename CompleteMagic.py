@@ -19,26 +19,32 @@ import re
 
 class CompleteMagic(sublime_plugin.EventListener):
 
-    def init(self):
-        pass
-
-    def read_completions(self, scope):
+    def __init__(self):
         completion_files = sublime.find_resources("*.cm-completions")       
+        self.completion_sets = []
 
         for c in completion_files:
             compldata = json.loads(sublime.load_resource(c) )
+            self.completion_sets.append(compldata)
 
-            if compldata['scope'] in scope:
-                return compldata
+
+    def read_completions(self, scope):        
+        
+        for c in self.completion_sets:
+            if c['scope'] in scope:
+                return c
 
         return False
+
 
     def isFile(self, fname):        
         print(fname)
         return os.path.isfile(fname)
 
+
     def globComplete(self):
         pass
+        
 
     def populate_autocomplete(self, prefix, completions, path=""):  
         complist = []
