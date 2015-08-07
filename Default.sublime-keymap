@@ -31,14 +31,17 @@
 		]
 	},
 
-	// { "keys": ["tab"], "command": "commit_first_field", "context":
-	// 	[
-	// 		{ "key": "has_prev_field", "operator": "equal", "operand": false },
-	// 		{ "key": "auto_complete_visible" },
-	// 		{ "key": "setting.auto_complete_commit_on_tab" },
-	// 		{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
-	// 	]
-	// },
+	{ "keys": ["tab"], "command": "commit_first_field", "context":
+		[
+			{ "key": "has_prev_field", "operator": "equal", "operand": false },
+			// Prevent triggering of second autocomplete when last inserted word
+			// matches snippet trigger etc
+			{ "key": "has_next_field", "operator": "equal", "operand": true }, 
+			{ "key": "auto_complete_visible" },
+			{ "key": "setting.auto_complete_commit_on_tab" },
+			{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
+		]
+	},
 
 	{ "keys": ["enter"], "command": "commit_completion", "context":
 		[
