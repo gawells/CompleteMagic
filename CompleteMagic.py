@@ -29,7 +29,7 @@ class CommitFirstFieldCommand(sublime_plugin.TextCommand):
     def run(self,edit):
         print("*****************************First Field")
         self.view.run_command("commit_completion", {})
-        self.view.run_command("auto_complete", {})
+        self.view.run_command("auto_complete", {'disable_auto_insert': True})
 
 
 class ProcessComps(threading.Thread):

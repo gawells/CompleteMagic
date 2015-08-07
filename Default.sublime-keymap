@@ -17,20 +17,13 @@
 	// 	]
 	// },
 
+
+
 	// { "keys": ["tab"], "command": "commit_completion", "context":	
 	// 	[
 	// 		{ "key": "auto_complete_visible"},
 	// 	]
 	// },
-
-	{ "keys": ["tab"], "command": "commit_next_field", "context":
-		[
-			{ "key": "has_next_field", "operator": "equal", "operand": true },
-			{ "key": "selector", "operator": "equal", "operand": "source.pbs"},
-			{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
-			// { "key": "setting.auto_complete_commit_on_tab" },
-		]
-	},
 
 	{ "keys": ["tab"], "command": "commit_first_field", "context":
 		[
@@ -41,6 +34,15 @@
 			{ "key": "auto_complete_visible" },
 			{ "key": "setting.auto_complete_commit_on_tab" },
 			{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
+		]
+	},
+
+	{ "keys": ["tab"], "command": "commit_next_field", "context":
+		[
+			{ "key": "has_next_field", "operator": "equal", "operand": true },
+			{ "key": "selector", "operator": "equal", "operand": "source.pbs"},
+			{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
+			// { "key": "setting.auto_complete_commit_on_tab" },
 		]
 	},
 
