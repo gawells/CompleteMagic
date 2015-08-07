@@ -27,6 +27,7 @@ class CommitNextFieldCommand(sublime_plugin.TextCommand):
 
 class CommitFirstFieldCommand(sublime_plugin.TextCommand):
     def run(self,edit):
+        print("*****************************First Field")
         self.view.run_command("commit_completion", {})
         self.view.run_command("auto_complete", {})
 

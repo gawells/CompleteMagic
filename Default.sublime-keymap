@@ -28,6 +28,7 @@
 			{ "key": "has_next_field", "operator": "equal", "operand": true },
 			{ "key": "selector", "operator": "equal", "operand": "source.pbs"},
 			{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
+			// { "key": "setting.auto_complete_commit_on_tab" },
 		]
 	},
 
@@ -36,7 +37,7 @@
 			{ "key": "has_prev_field", "operator": "equal", "operand": false },
 			// Prevent triggering of second autocomplete when last inserted word
 			// matches snippet trigger etc
-			{ "key": "has_next_field", "operator": "equal", "operand": true }, 
+			// { "key": "has_next_field", "operator": "equal", "operand": true }, 
 			{ "key": "auto_complete_visible" },
 			{ "key": "setting.auto_complete_commit_on_tab" },
 			{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
