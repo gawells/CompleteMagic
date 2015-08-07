@@ -16,16 +16,52 @@ from os.path import basename
 import json
 import glob
 import re
+import threading
 
-class CompleteMagic(sublime_plugin.EventListener):
+class UpdateCompletionsTableCommand(sublime_plugin.TextCommand):
+    pass
 
+
+class ProcessComps(threading.Thread):
     def __init__(self):
+        self.result = None
+        threading.Thread.__init__(self)
+
+
+    def run(self):
+        completion_sets = []
         completion_files = sublime.find_resources("*.cm-completions")       
-        self.completion_sets = []
 
         for c in completion_files:
             compldata = json.loads(sublime.load_resource(c) )
-            self.completion_sets.append(compldata)
+            completion_sets.append(compldata)
+
+        self.result = completion_sets
+
+
+class CompleteMagic(sublime_plugin.EventListener):
+    def __init__(self):
+        # completion_files = sublime.find_resources("*.cm-completions")       
+        self.completion_sets = []
+
+        # for c in completion_files:
+        #     compldata = json.loads(sublime.load_resource(c) )
+        #     self.completion_sets.append(compldata)
+
+        updateCompletions = ProcessComps()
+        updateCompletions.start()
+        self.rereadCompletions(updateCompletions)
+
+
+    def rereadCompletions(self, thread):
+
+        if thread.is_alive():
+            print ("reread is running")
+            sublime.set_timeout(lambda: self.rereadCompletions(thread),100)
+            return
+
+        print ("reread finished")
+        self.completion_sets = thread.result
 
 
     def read_completions(self, scope):        
@@ -44,7 +80,7 @@ class CompleteMagic(sublime_plugin.EventListener):
 
     def globComplete(self):
         pass
-        
+
 
     def populate_autocomplete(self, prefix, completions, path=""):  
         complist = []
