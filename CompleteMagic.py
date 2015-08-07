@@ -18,8 +18,12 @@ import glob
 import re
 import threading
 
-class UpdateCompletionsTableCommand(sublime_plugin.TextCommand):
-    pass
+class CommitNextFieldCommand(sublime_plugin.TextCommand):
+
+    def run(self,edit):
+        self.view.run_command("commit_completion", {})
+        self.view.run_command("next_field", {})
+        self.view.run_command("auto_complete", {})
 
 
 class ProcessComps(threading.Thread):
@@ -29,6 +33,8 @@ class ProcessComps(threading.Thread):
 
 
     def run(self):
+        # while True:
+        self.result = None
         completion_sets = []
         completion_files = sublime.find_resources("*.cm-completions")       
 
@@ -57,7 +63,7 @@ class CompleteMagic(sublime_plugin.EventListener):
 
         if thread.is_alive():
             print ("reread is running")
-            sublime.set_timeout(lambda: self.rereadCompletions(thread),100)
+            sublime.set_timeout(lambda: self.rereadCompletions(thread),100)            
             return
 
         print ("reread finished")
