@@ -24,6 +24,7 @@ class CommitNextFieldCommand(sublime_plugin.TextCommand):
         self.view.run_command("next_field", {})
         self.view.run_command("auto_complete", {})
 
+
 class CommitFirstFieldCommand(sublime_plugin.TextCommand):
     def run(self,edit):
         self.view.run_command("commit_completion", {})
@@ -51,12 +52,7 @@ class ProcessComps(threading.Thread):
 
 class CompleteMagic(sublime_plugin.EventListener):
     def __init__(self):
-        # completion_files = sublime.find_resources("*.cm-completions")       
         self.completion_sets = []
-
-        # for c in completion_files:
-        #     compldata = json.loads(sublime.load_resource(c) )
-        #     self.completion_sets.append(compldata)
 
         updateCompletions = ProcessComps()
         updateCompletions.start()
@@ -116,7 +112,6 @@ class CompleteMagic(sublime_plugin.EventListener):
             complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
             print (complist)
 
-        # complist.append(("nested","true"))  
         return complist
 
                 
@@ -133,6 +128,5 @@ class CompleteMagic(sublime_plugin.EventListener):
 
         if compldata:           
             clist = self.populate_autocomplete(prefix, compldata, path)
-            # print(clist)
             return clist
                     
