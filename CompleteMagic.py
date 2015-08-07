@@ -20,14 +20,14 @@ import threading
 
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
     def run(self,edit):
-        self.view.run_command("commit_completion", {})
+        # self.view.run_command("commit_completion", {})
         self.view.run_command("next_field", {})
         self.view.run_command("auto_complete", {})
 
 
 class CommitFirstFieldCommand(sublime_plugin.TextCommand):
     def run(self,edit):
-        self.view.run_command("commit_completion", {})
+        # self.view.run_command("commit_completion", {})
         self.view.run_command("auto_complete", {})
 
 
@@ -60,7 +60,6 @@ class CompleteMagic(sublime_plugin.EventListener):
 
 
     def rereadCompletions(self, thread):
-
         if thread.is_alive():
             print ("reread is running")
             sublime.set_timeout(lambda: self.rereadCompletions(thread),100)            
@@ -71,7 +70,6 @@ class CompleteMagic(sublime_plugin.EventListener):
 
 
     def read_completions(self, scope):        
-        
         for c in self.completion_sets:
             if c['scope'] in scope:
                 return c
@@ -110,13 +108,11 @@ class CompleteMagic(sublime_plugin.EventListener):
             print (path+"/*."+ext)
             glist = glob.glob(path+"/*"+ext+'*')
             complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
-            print (complist)
 
         return complist
 
                 
     def on_query_completions(self, view, prefix, locations):
-
         path = './'
         scope_name = view.scope_name(0)   
         compldata = self.read_completions(scope_name)

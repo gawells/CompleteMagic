@@ -7,32 +7,38 @@
 	// 		{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"}
 	// ]
 	// },
+	// { "keys": ["tab"], "command": "run_macro_file", "args": {"file": "res://Packages/CompleteMagic/first_field.sublime-macro"}, "context":
+	// 	[
+	// 		{ "key": "has_prev_field", "operator": "equal", "operand": false },
+	// 		{ "key": "auto_complete_visible" },
+	// 		{ "key": "setting.auto_complete_commit_on_tab" },
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
+	// 		// { "key": "selector", "operator": "regex_contains", "operand": "source.pbs"}
+	// 	]
+	// },
 
-	{ "keys": ["tab"], "command": "commit_completion", "context":	
-		[
-			{ "key": "auto_complete_visible"},
-			// { "key": "setting.auto_complete_commit_on_tab" }
-		]
-	},
+	// { "keys": ["tab"], "command": "commit_completion", "context":	
+	// 	[
+	// 		{ "key": "auto_complete_visible"},
+	// 	]
+	// },
 
-	{ "keys": ["tab"], "command": "commit_next_field", "context":
-		[
-			{ "key": "has_next_field", "operator": "equal", "operand": true },
-			{ "key": "selector", "operator": "equal", "operand": "source.pbs"},
-			{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
-			// { "key": "auto_complete_visible"}
-		]
-	},
+	// { "keys": ["tab"], "command": "commit_next_field", "context":
+	// 	[
+	// 		{ "key": "has_next_field", "operator": "equal", "operand": true },
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.pbs"},
+	// 		{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
+	// 	]
+	// },
 
-	{ "keys": ["tab"], "command": "run_macro_file", "args": {"file": "res://Packages/CompleteMagic/first_field.sublime-macro"}, "context":
-		[
-			{ "key": "has_prev_field", "operator": "equal", "operand": false },
-			{ "key": "auto_complete_visible" },
-			{ "key": "setting.auto_complete_commit_on_tab" },
-			{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
-			// { "key": "selector", "operator": "regex_contains", "operand": "source.pbs"}
-		]
-	},
+	// { "keys": ["tab"], "command": "commit_first_field", "context":
+	// 	[
+	// 		{ "key": "has_prev_field", "operator": "equal", "operand": false },
+	// 		{ "key": "auto_complete_visible" },
+	// 		{ "key": "setting.auto_complete_commit_on_tab" },
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
+	// 	]
+	// },
 
 	{ "keys": ["enter"], "command": "commit_completion", "context":
 		[
