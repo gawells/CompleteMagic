@@ -23,13 +23,13 @@
 	// 	]
 	// },
 
-	// { "keys": ["tab"], "command": "commit_next_field", "context":
-	// 	[
-	// 		{ "key": "has_next_field", "operator": "equal", "operand": true },
-	// 		{ "key": "selector", "operator": "equal", "operand": "source.pbs"},
-	// 		{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
-	// 	]
-	// },
+	{ "keys": ["tab"], "command": "commit_next_field", "context":
+		[
+			{ "key": "has_next_field", "operator": "equal", "operand": true },
+			{ "key": "selector", "operator": "equal", "operand": "source.pbs"},
+			{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
+		]
+	},
 
 	// { "keys": ["tab"], "command": "commit_first_field", "context":
 	// 	[
