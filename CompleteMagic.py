@@ -19,10 +19,14 @@ import re
 import threading
 
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
-
     def run(self,edit):
         self.view.run_command("commit_completion", {})
         self.view.run_command("next_field", {})
+        self.view.run_command("auto_complete", {})
+
+class CommitFirstFieldCommand(sublime_plugin.TextCommand):
+    def run(self,edit):
+        self.view.run_command("commit_completion", {})
         self.view.run_command("auto_complete", {})
 
 
