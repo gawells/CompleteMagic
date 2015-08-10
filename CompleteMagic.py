@@ -19,14 +19,14 @@ import re
 import threading
 
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
-    def run(self,edit):
+    def run(self, edit):
         self.view.run_command("commit_completion", {})
         self.view.run_command("next_field", {})
         self.view.run_command("auto_complete", {})
 
 
 class TabIntoSnippetCommand(sublime_plugin.TextCommand):
-    def run(self,edit):
+    def run(self, edit):
         print("*** Tab into snippet ***")
         self.view.run_command("commit_completion", {})
         self.view.run_command("auto_complete", {
@@ -34,6 +34,21 @@ class TabIntoSnippetCommand(sublime_plugin.TextCommand):
             'next_completion_if_showing': False
         })
 
+class GlobSelCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        sel = self.view.substr(self.view.sel()[0])
+
+        path = './'
+        fname = self.view.file_name()
+        if fname:
+            path = os.path.dirname(fname)
+
+        glist = glob.glob("%s/*%s*"%(path,sel))
+        complist = []
+        complist = complist + [("%s\t%s"%
+            (sel, basename(x)), basename(x)) for x in glist]
+
+        self.view.run_command("")
 
 class ProcessComps(threading.Thread):
     def __init__(self):
@@ -129,8 +144,12 @@ class CompleteMagic(sublime_plugin.EventListener):
         if fname:
             path = os.path.dirname(fname)
         
-
         if compldata:           
             clist = self.populate_autocomplete(prefix, compldata, path)
             return clist
-                    
+
+    def on_query_context(self, view, key, operator, operand, match_all):
+        print ("QUERY CONTEXT")
+
+    # def on_window_command(self,window,name,args):
+    #     print(name+" :: "+str(args))
