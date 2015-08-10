@@ -27,8 +27,12 @@ class CommitNextFieldCommand(sublime_plugin.TextCommand):
 
 class TabIntoSnippetCommand(sublime_plugin.TextCommand):
     def run(self,edit):
+        print("*** Tab into snippet ***")
         self.view.run_command("commit_completion", {})
-        self.view.run_command("auto_complete", {'disable_auto_insert': True})
+        self.view.run_command("auto_complete", {
+            'disable_auto_insert': True, 
+            'next_completion_if_showing': False
+        })
 
 
 class ProcessComps(threading.Thread):
@@ -100,7 +104,7 @@ class CompleteMagic(sublime_plugin.EventListener):
                         complist.append(("%s: %s"%(fieldname, completion), completion))                    
                     else:                        
                         glist = glob.glob(path+"/"+completion)
-                        complist = complist + [("%s: %s"%
+                        complist = complist + [("%s\t%s"%
                             (fieldname, basename(x)), basename(x)) for x in glist]
 
         if re.search('_-\w{3}',prefix):
@@ -113,6 +117,11 @@ class CompleteMagic(sublime_plugin.EventListener):
 
                 
     def on_query_completions(self, view, prefix, locations):
+
+        print("Prefix>"+prefix+"<EndPrefix")
+        print (view.extract_completions(prefix))
+        print (view.command_history(0))
+        
         path = './'
         scope_name = view.scope_name(0)   
         compldata = self.read_completions(scope_name)
@@ -120,7 +129,6 @@ class CompleteMagic(sublime_plugin.EventListener):
         if fname:
             path = os.path.dirname(fname)
         
-        print("Prefix>"+prefix+"<EndPrefix")
 
         if compldata:           
             clist = self.populate_autocomplete(prefix, compldata, path)
