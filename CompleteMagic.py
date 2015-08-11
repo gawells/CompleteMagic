@@ -34,7 +34,7 @@ class TabIntoSnippetCommand(sublime_plugin.TextCommand):
             'next_completion_if_showing': False
         })
 
-class GlobSelCommand(sublime_plugin.TextCommand):
+class InsertFileNameCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         sel = self.view.substr(self.view.sel()[0])
 
@@ -44,11 +44,17 @@ class GlobSelCommand(sublime_plugin.TextCommand):
             path = os.path.dirname(fname)
 
         glist = glob.glob("%s/*%s*"%(path,sel))
-        complist = []
-        complist = complist + [("%s\t%s"%
-            (sel, basename(x)), basename(x)) for x in glist]
+        
+        self.complist = [basename(x) for x in glist]
 
-        self.view.run_command("")
+        sublime.active_window().show_quick_panel(self.complist,self.on_done)
+
+    def on_done(self, index):
+        self.view.run_command("insert_my_text", {"args":{'text':self.complist[index]}})
+
+class InsertMyText(sublime_plugin.TextCommand):
+    def run(self, edit, args):
+        self.view.replace(edit, self.view.sel()[0], args['text'])
 
 class ProcessComps(threading.Thread):
     def __init__(self):
@@ -133,9 +139,9 @@ class CompleteMagic(sublime_plugin.EventListener):
                 
     def on_query_completions(self, view, prefix, locations):
 
-        print("Prefix>"+prefix+"<EndPrefix")
-        print (view.extract_completions(prefix))
-        print (view.command_history(0))
+        # print("Prefix>"+prefix+"<EndPrefix")
+        # print (view.extract_completions(prefix))
+        # print (view.command_history(0))
         
         path = './'
         scope_name = view.scope_name(0)   
@@ -148,8 +154,8 @@ class CompleteMagic(sublime_plugin.EventListener):
             clist = self.populate_autocomplete(prefix, compldata, path)
             return clist
 
-    def on_query_context(self, view, key, operator, operand, match_all):
-        print ("QUERY CONTEXT")
+    # def on_query_context(self, view, key, operator, operand, match_all):
+    #     print ("QUERY CONTEXT")
 
     # def on_window_command(self,window,name,args):
     #     print(name+" :: "+str(args))
