@@ -38,14 +38,17 @@ class TabIntoSnippetCommand(sublime_plugin.TextCommand):
 class InsertFileNameCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         sel = self.view.substr(self.view.sel()[0])
+        globchars = set("*?[]|")
 
         path = './'
         fname = self.view.file_name()
         if fname:
             path = os.path.dirname(fname)
 
-        glist = glob.glob("%s/*%s*"%(path,sel))
-        
+        if not any((c in globchars) for c in sel) :
+            glist = glob.glob("%s/*%s*"%(path,sel))        
+        else:
+            glist = glob.glob("%s/%s"%(path,sel))         
         self.complist = [basename(x) for x in glist]
 
         sublime.active_window().show_quick_panel(self.complist,self.on_done)
@@ -55,7 +58,6 @@ class InsertFileNameCommand(sublime_plugin.TextCommand):
 
 class InsertMyText(sublime_plugin.TextCommand):
     def run(self, edit, args):
-        # self.view.replace(edit, self.view.sel()[0], args['text'])
         for s in self.view.sel():
             self.view.replace(edit, s, args['text'])
 
