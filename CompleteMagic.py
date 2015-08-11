@@ -34,6 +34,7 @@ class TabIntoSnippetCommand(sublime_plugin.TextCommand):
             'next_completion_if_showing': False
         })
 
+
 class InsertFileNameCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         sel = self.view.substr(self.view.sel()[0])
@@ -54,7 +55,10 @@ class InsertFileNameCommand(sublime_plugin.TextCommand):
 
 class InsertMyText(sublime_plugin.TextCommand):
     def run(self, edit, args):
-        self.view.replace(edit, self.view.sel()[0], args['text'])
+        # self.view.replace(edit, self.view.sel()[0], args['text'])
+        for s in self.view.sel():
+            self.view.replace(edit, s, args['text'])
+
 
 class ProcessComps(threading.Thread):
     def __init__(self):
