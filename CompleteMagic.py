@@ -18,6 +18,7 @@ import glob
 import re
 import threading
 
+
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         self.view.run_command("commit_completion", {})
@@ -71,20 +72,23 @@ class ProcessComps(threading.Thread):
     def run(self):
         # while True:
         self.result = None
-        completion_sets = []
+        self.completion_sets = []
         completion_files = sublime.find_resources("*.cm-completions")       
 
         for c in completion_files:
             compldata = json.loads(sublime.load_resource(c) )
-            completion_sets.append(compldata)
+            self.completion_sets.append(compldata)
 
         self.result = completion_sets
 
 
+class RereadCompletionsCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        pass
+
+
 class CompleteMagic(sublime_plugin.EventListener):
     def __init__(self):
-        self.completion_sets = []
-
         updateCompletions = ProcessComps()
         updateCompletions.start()
         self.rereadCompletions(updateCompletions)
@@ -113,10 +117,6 @@ class CompleteMagic(sublime_plugin.EventListener):
         return os.path.isfile(fname)
 
 
-    def globComplete(self):
-        pass
-
-
     def populate_autocomplete(self, prefix, completions, path=""):  
         complist = []
         if prefix == '':
@@ -128,7 +128,7 @@ class CompleteMagic(sublime_plugin.EventListener):
                 globchars = set("*?[]|")
                 for completion in completions['completions'][fieldname]:
                     if not any((c in globchars) for c in completion) :
-                        complist.append(("%s: %s"%(fieldname, completion), completion))                    
+                        complist.append(("%s\t %s"%(fieldname, completion), completion))                    
                     else:                        
                         glist = glob.glob(path+"/"+completion)
                         complist = complist + [("%s\t%s"%
