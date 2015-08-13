@@ -22,6 +22,6 @@
 		]
 	},
 	
-	{ "keys": ["ctrl+alt+i"], "command": "insert_file_name"},
+	{ "keys": ["super+alt+i"], "command": "insert_file_name"},
 
 ]

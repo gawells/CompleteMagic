@@ -23,7 +23,10 @@ class CommitNextFieldCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         self.view.run_command("commit_completion", {})
         self.view.run_command("next_field", {})
-        self.view.run_command("auto_complete", {})
+        self.view.run_command("auto_complete", {
+            'disable_auto_insert': True, 
+            'next_completion_if_showing': False
+        })
 
 
 class TabIntoSnippetCommand(sublime_plugin.TextCommand):
