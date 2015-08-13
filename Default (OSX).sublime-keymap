@@ -23,5 +23,4 @@
 	},
 	
 	{ "keys": ["super+alt+i"], "command": "insert_file_name"},
-
 ]

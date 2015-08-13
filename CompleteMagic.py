@@ -12,12 +12,25 @@
 import sublime             
 import sublime_plugin   
 import os
-from os.path import basename
 import json
 import glob
 import re
 import threading
+import logging
 
+from os.path import basename
+
+PLUGIN_SETTINGS = sublime.load_settings("CompleteMagic.sublime-settings")
+DEBUG = PLUGIN_SETTINGS.get("debug", False)
+print(DEBUG)
+
+logging.basicConfig(format='[CompleteMagic] %(message)s ')
+logger = logging.getLogger(__name__)
+
+if (DEBUG):
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.WARNING)
 
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
     def run(self, edit):
@@ -31,7 +44,7 @@ class CommitNextFieldCommand(sublime_plugin.TextCommand):
 
 class TabIntoSnippetCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        print("*** Tab into snippet ***")
+        logger.debug("*** Tab into snippet ***")
         self.view.run_command("commit_completion", {})
         self.view.run_command("auto_complete", {
             'disable_auto_insert': True, 
@@ -82,7 +95,7 @@ class ProcessComps(threading.Thread):
             compldata = json.loads(sublime.load_resource(c) )
             self.completion_sets.append(compldata)
 
-        self.result = completion_sets
+        self.result = self.completion_sets
 
 
 class RereadCompletionsCommand(sublime_plugin.TextCommand):
@@ -99,11 +112,11 @@ class CompleteMagic(sublime_plugin.EventListener):
 
     def rereadCompletions(self, thread):
         if thread.is_alive():
-            print ("reread is running")
+            logger.debug("reread is running")
             sublime.set_timeout(lambda: self.rereadCompletions(thread),100)            
             return
 
-        print ("reread finished")
+        logger.debug("reread finished")
         self.completion_sets = thread.result
 
 
@@ -139,7 +152,7 @@ class CompleteMagic(sublime_plugin.EventListener):
 
         if re.search('_-\w{3}',prefix):
             ext = prefix[-3:]
-            print (path+"/*."+ext)
+            logger.debug(path+"/*."+ext)
             glist = glob.glob(path+"/*"+ext+'*')
             complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
 
@@ -149,8 +162,8 @@ class CompleteMagic(sublime_plugin.EventListener):
     def on_query_completions(self, view, prefix, locations):
 
         # print("Prefix>"+prefix+"<EndPrefix")
-        # print (view.extract_completions(prefix))
-        # print (view.command_history(0))
+        # logger.debug(view.extract_completions(prefix))
+        # logger.debug(view.command_history(0))
         
         path = './'
         scope_name = view.scope_name(0)   
@@ -164,7 +177,7 @@ class CompleteMagic(sublime_plugin.EventListener):
             return clist
 
     # def on_query_context(self, view, key, operator, operand, match_all):
-    #     print ("QUERY CONTEXT")
+    #     logger.debug("QUERY CONTEXT")
 
     # def on_window_command(self,window,name,args):
     #     print(name+" :: "+str(args))
