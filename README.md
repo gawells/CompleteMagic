@@ -7,5 +7,8 @@ of a snippet, the autocomplete popup is triggered with the appropriate custom li
 during normal typing as well.
 
 Additional functionality includes the insertion of filenames from the current directory, either by entering:
-"\_-xyz" which will glob for *xyz* or by selecting a more complex pattern (sublime only recognises alphanumeric + "_" 
+"\_-xyz" which will glob for \*xyz\* or by selecting a more complex pattern (sublime only recognises alphanumeric + "_" 
 for autocomplete triggers) and running the insert_file_name command.
+
+
+![animation](https://github.com/gawells/CompleteMagic/blob/master/ani.gif)
