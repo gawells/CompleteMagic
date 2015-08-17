@@ -1,13 +1,11 @@
-
 # This Python file uses the following encoding: utf-8
 #-----------------------------------------------------------------------------------
 # CompleteMagic
 #-----------------------------------------------------------------------------------
 #
-# Originally derived from DictionaryAutocomplete by (c) Florian Zinggeler
+# Originally derived from DictionaryAutocomplete by (c) Florian Zinggeler, now much 
+# altered
 #-----------------------------------------------------------------------------------
-# is there some way to trigger the popup with non-matching strings? This would enable
-# automatic default field insertion, but with an optional popup of alternatives.
 
 import sublime             
 import sublime_plugin   
@@ -25,7 +23,6 @@ DEBUG = PLUGIN_SETTINGS.get("debug", False)
 
 logging.basicConfig(format='[CompleteMagic] %(message)s ')
 logger = logging.getLogger(__name__)
-# completionsG = []
 
 if (DEBUG):
     logger.setLevel(logging.DEBUG)
@@ -33,6 +30,12 @@ else:
     logger.setLevel(logging.WARNING)
 
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
+    '''
+    Command to commit completion, move to next field, and call autocomplete
+    popout within a snippet. To be bound to the tab key, preferably inside
+    a user-defined syntax to prevent unexpected behaviour in normal shell/
+    programming syntaxes.
+    '''
 
     def run(self, edit):
         self.view.run_command("commit_completion", {})
@@ -44,6 +47,17 @@ class CommitNextFieldCommand(sublime_plugin.TextCommand):
 
 
 class TabIntoSnippetCommand(sublime_plugin.TextCommand):
+    '''
+    Command to commit completion, and call autocomplete popout within the 
+    first field of a snippet. To be bound to the tab key, preferably inside
+    a user-defined syntax to prevent unexpected behaviour in normal shell/
+    programming syntaxes. Unfortunately this overrides the commit completion
+    on autocomplete visible condition for hitting tab. There doesn't seem to
+    be an appropriate event listener (e.g. on_commit_completion) to separate
+    the two conditions.
+
+    '''
+    
     def run(self, edit):
         logger.debug("*** Tab into snippet ***")
         self.view.run_command("commit_completion", {})
@@ -54,6 +68,13 @@ class TabIntoSnippetCommand(sublime_plugin.TextCommand):
 
 
 class InsertFileNameCommand(sublime_plugin.TextCommand):
+    '''
+    Type and select a glob, then run this command to pull up list of matching
+    files in a quick-panel, choose file and hit enter to replace the selected 
+    text. Because autocomplete only matches alphanumerics + '_' for its triggering
+    prefix, it doesn't seem to be possible to do this via the autocomplete popout. 
+    '''
+    
     def run(self, edit):
         sel = self.view.substr(self.view.sel()[0])
         globchars = set("*?[]|")
@@ -75,19 +96,26 @@ class InsertFileNameCommand(sublime_plugin.TextCommand):
         self.view.run_command("insert_my_text", {"args":{'text':self.complist[index]}})
 
 class InsertMyText(sublime_plugin.TextCommand):
+    '''
+    Command to insert filename from glob list via InsertFileNameCommand
+    '''
+    
     def run(self, edit, args):
         for s in self.view.sel():
             self.view.replace(edit, s, args['text'])
 
 
 class ProcessComps(threading.Thread):
+    '''
+    Background thread to read user-defined completions
+    '''
+
     def __init__(self):
         self.result = None
         threading.Thread.__init__(self)
 
 
     def run(self):
-        # while True:
         self.result = None
         self.completion_sets = []
         completion_files = sublime.find_resources("*.cm-completions")       
@@ -103,8 +131,8 @@ class RereadCompletionsCommand(sublime_plugin.TextCommand):
     '''
     Only way I can think of to do this. Would like to have a thread
     watching for changes to .cm-copmletions files
-
     '''
+   
     def run(self, edit):
         sublime_plugin.reload_plugin("CompleteMagic")
 
@@ -113,21 +141,28 @@ class CompleteMagic(sublime_plugin.EventListener):
     def __init__(self):
         updateCompletions = ProcessComps()
         updateCompletions.start()
-        self.rereadCompletions(updateCompletions)
+        self.loadCompletions(updateCompletions)
 
 
-    def rereadCompletions(self, thread):
+    def loadCompletions(self, thread):
+        '''
+        Load user defined completions into arra
+        '''
+        
         if thread.is_alive():
             logger.debug("reread is running")
-            sublime.set_timeout(lambda: self.rereadCompletions(thread),100)            
+            sublime.set_timeout(lambda: self.loadCompletions(thread),100)            
             return
 
         logger.debug("reread finished")
-        # completionsG = thread.result
         self.completion_sets = thread.result
 
 
-    def read_completions(self, scope):        
+    def read_completions(self, scope):
+        '''
+        Return completion set for current scope
+        '''        
+
         for c in self.completion_sets:
             if c['scope'] in scope:
                 return c
@@ -140,22 +175,30 @@ class CompleteMagic(sublime_plugin.EventListener):
 
 
     def populate_autocomplete(self, prefix, completions, path=""):  
+        '''
+        Populate autocomplete triggered by prefix. Start of entry names must 
+        match prefix, but associated text to be inserted can be anything
+        '''
+
         complist = []
         if prefix == '':
             return complist
 
-        for fieldname in completions['completions']:
-            
+        # Fill autocomplete with .cm-completions derived entries  
+        for fieldname in completions['completions']:            
             if (fieldname.lower().startswith(prefix.lower())):                
                 globchars = set("*?[]|")
                 for completion in completions['completions'][fieldname]:
+                    # Predefined list:
                     if not any((c in globchars) for c in completion) :
                         complist.append(("%s\t %s"%(fieldname, completion), completion))                    
+                    # Predefined glob:
                     else:                        
                         glist = glob.glob(path+"/"+completion)
                         complist = complist + [("%s\t%s"%
                             (fieldname, basename(x)), basename(x)) for x in glist]
 
+        # Trigger glob based autocomplete by typing _-xyz ( = *.xyz)
         if re.search('_-\w{3}',prefix):
             ext = prefix[-3:]
             logger.debug(path+"/*."+ext)
@@ -166,10 +209,10 @@ class CompleteMagic(sublime_plugin.EventListener):
 
                 
     def on_query_completions(self, view, prefix, locations):
+        '''
+        Inject user-defined autocompletions
+        '''
 
-        # print(completionsG)
-        # print("Prefix>"+prefix+"<EndPrefix")
-        
         path = './'
         scope_name = view.scope_name(0)   
         compldata = self.read_completions(scope_name)
@@ -181,8 +224,3 @@ class CompleteMagic(sublime_plugin.EventListener):
             clist = self.populate_autocomplete(prefix, compldata, path)
             return clist
 
-    # def on_query_context(self, view, key, operator, operand, match_all):
-    #     logger.debug("QUERY CONTEXT")
-
-    # def on_window_command(self,window,name,args):
-    #     print(name+" :: "+str(args))
