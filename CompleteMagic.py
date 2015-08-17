@@ -22,10 +22,10 @@ from os.path import basename
 
 PLUGIN_SETTINGS = sublime.load_settings("CompleteMagic.sublime-settings")
 DEBUG = PLUGIN_SETTINGS.get("debug", False)
-print(DEBUG)
 
 logging.basicConfig(format='[CompleteMagic] %(message)s ')
 logger = logging.getLogger(__name__)
+# completionsG = []
 
 if (DEBUG):
     logger.setLevel(logging.DEBUG)
@@ -33,6 +33,7 @@ else:
     logger.setLevel(logging.WARNING)
 
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
+
     def run(self, edit):
         self.view.run_command("commit_completion", {})
         self.view.run_command("next_field", {})
@@ -99,8 +100,13 @@ class ProcessComps(threading.Thread):
 
 
 class RereadCompletionsCommand(sublime_plugin.TextCommand):
+    '''
+    Only way I can think of to do this. Would like to have a thread
+    watching for changes to .cm-copmletions files
+
+    '''
     def run(self, edit):
-        pass
+        sublime_plugin.reload_plugin("CompleteMagic")
 
 
 class CompleteMagic(sublime_plugin.EventListener):
@@ -117,6 +123,7 @@ class CompleteMagic(sublime_plugin.EventListener):
             return
 
         logger.debug("reread finished")
+        # completionsG = thread.result
         self.completion_sets = thread.result
 
 
@@ -129,7 +136,6 @@ class CompleteMagic(sublime_plugin.EventListener):
 
 
     def isFile(self, fname):        
-        print(fname)
         return os.path.isfile(fname)
 
 
@@ -161,9 +167,8 @@ class CompleteMagic(sublime_plugin.EventListener):
                 
     def on_query_completions(self, view, prefix, locations):
 
+        # print(completionsG)
         # print("Prefix>"+prefix+"<EndPrefix")
-        # logger.debug(view.extract_completions(prefix))
-        # logger.debug(view.command_history(0))
         
         path = './'
         scope_name = view.scope_name(0)   
