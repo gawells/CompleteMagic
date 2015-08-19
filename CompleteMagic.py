@@ -29,6 +29,11 @@ if (DEBUG):
 else:
     logger.setLevel(logging.WARNING)
 
+class ZshMagicCommand(sublime_plugin.TextCommand):
+    def run(self,edit):
+        script = self.view.substr(sublime.Region(0, self.view.size()))
+        
+
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
     '''
     Command to commit completion, move to next field, and call autocomplete
