@@ -32,8 +32,17 @@ else:
 class ZshMagicCommand(sublime_plugin.TextCommand):
     def run(self,edit):
         script = self.view.substr(sublime.Region(0, self.view.size()))
-        
 
+        regex = re.compile(
+            r'^[^#][\w\s]+(.+\\\s*\n)*'
+            r'(.*(\n|\Z))',re.M
+            )
+
+        for prog_instance in regex.finditer(script):
+            print ("%s - %s"%(prog_instance.start(0),prog_instance.end(0) ) )
+            print (prog_instance.group(0))
+
+ 
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
     '''
     Command to commit completion, move to next field, and call autocomplete
