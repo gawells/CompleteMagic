@@ -35,8 +35,6 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
     def command_till_loc(self,cstr,pos):
         get_start = re.compile(r'[^\s^\n]+[$\w]+.+')
         stripnewline = (re.sub(r'^\n+','',cstr[0:pos]))
-        print(stripnewline)
-        # start_of_command = get_start.search(cstr)
 
         path = './'
         fname = self.view.file_name()
@@ -53,7 +51,6 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
         script = self.view.substr(sublime.Region(0, self.view.size()))
         self.view.run_command("show_scope_name",{})
         loc = self.view.sel()[0].begin()
-        print (self.view.scope_name(loc))
 
         regex = re.compile(
             r'^[^#][\w\s]+(.+\\\s*\n)*'
@@ -71,7 +68,6 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
                 zsh_captures = self.command_till_loc(current_command,loc-beg)
                 self.capture_list = zsh_captures.split('\r\n')
                 prefix = script[loc-5:loc]
-                print(prefix)
 
                 # complist = [("%s: %s"%(prefix, x), x) for x in capture_list]
 
@@ -198,7 +194,7 @@ class CompleteMagic(sublime_plugin.EventListener):
 
     def loadCompletions(self, thread):
         '''
-        Load user defined completions into arra
+        Load user defined completions into array
         '''
         
         if thread.is_alive():
