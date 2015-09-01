@@ -81,8 +81,6 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
         self.view.run_command("insert_my_text", {"args":{'text':self.capture_list[index]}})
 
 
-
- 
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
     '''
     Command to commit completion, move to next field, and call autocomplete

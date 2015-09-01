@@ -24,6 +24,7 @@
 	
 	{ "keys": ["ctrl+alt+i"], "command": "insert_file_name"},
 
-	{ "keys": ["ctrl+c","ctrl+r"], "command":"reread_completions"}
+	{ "keys": ["ctrl+c","ctrl+r"], "command":"reread_completions"},
 
+	{ "keys": ["ctrl+alt+z"], "command": "zsh_magic"},
 ]

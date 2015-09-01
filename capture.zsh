@@ -1,4 +1,6 @@
 #!/bin/zsh
+# slight modification of Vincent Breitmoser's capture.zsh:
+# https://github.com/Valodim/zsh-capture-completion
 
 zmodload zsh/zpty || { echo 'error: missing module zsh/zpty' >&2; exit 1 }
 
