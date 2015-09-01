@@ -15,6 +15,7 @@ import glob
 import re
 import threading
 import logging
+import subprocess
 
 from os.path import basename
 
@@ -30,20 +31,56 @@ else:
     logger.setLevel(logging.WARNING)
 
 class ZshMagicCommand(sublime_plugin.TextCommand):
+    
+    def command_till_loc(self,cstr,pos):
+        get_start = re.compile(r'[^\s^\n]+[$\w]+.+')
+        stripnewline = (re.sub(r'^\n+','',cstr[0:pos]))
+        print(stripnewline)
+        # start_of_command = get_start.search(cstr)
+
+        path = './'
+        fname = self.view.file_name()
+        if fname:
+            path = os.path.dirname(fname)
+            os.chdir(path)
+
+        proc = subprocess.Popen(["capture.zsh", stripnewline], stdout=subprocess.PIPE)
+        out = proc.communicate()[0]
+        return out.decode("utf-8")
+
+
     def run(self,edit):
         script = self.view.substr(sublime.Region(0, self.view.size()))
         self.view.run_command("show_scope_name",{})
         loc = self.view.sel()[0].begin()
         print (self.view.scope_name(loc))
 
-        # regex = re.compile(
-        #     r'^[^#][\w\s]+(.+\\\s*\n)*'
-        #     r'(.*(\n|\Z))',re.M
-        #     )
+        regex = re.compile(
+            r'^[^#][\w\s]+(.+\\\s*\n)*'
+            r'(.*(\n|\Z))',re.M
+            )
 
-        # for prog_instance in regex.finditer(script):
-        #     print ("%s - %s"%(prog_instance.start(0),prog_instance.end(0) ) )
-        #     print (prog_instance.group(0))
+        for prog_instance in regex.finditer(script):
+            beg = prog_instance.start(0)
+            end = prog_instance.end(0)
+
+            if (loc >= beg) and (loc <= end):
+                current_command = prog_instance.group(0)
+                # print ("%s - %s"%(beg, end))
+                # print (current_command)
+                zsh_captures = self.command_till_loc(current_command,loc-beg)
+                self.capture_list = zsh_captures.split('\r\n')
+                prefix = script[loc-5:loc]
+                print(prefix)
+
+                # complist = [("%s: %s"%(prefix, x), x) for x in capture_list]
+
+                sublime.active_window().show_quick_panel(self.capture_list,self.on_done)
+
+    def on_done(self, index):
+        self.view.run_command("insert_my_text", {"args":{'text':self.capture_list[index]}})
+
+
 
  
 class CommitNextFieldCommand(sublime_plugin.TextCommand):
@@ -221,6 +258,7 @@ class CompleteMagic(sublime_plugin.EventListener):
             logger.debug(path+"/*."+ext)
             glist = glob.glob(path+"/*"+ext+'*')
             complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
+
 
         return complist
 
