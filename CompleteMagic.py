@@ -35,6 +35,7 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
     def command_till_loc(self,cstr,pos):
         get_start = re.compile(r'[^\s^\n]+[$\w]+.+')
         stripnewline = (re.sub(r'^\n+','',cstr[0:pos]))
+        self.partial_command = stripnewline
 
         path = './'
         fname = self.view.file_name()
@@ -42,7 +43,7 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
             path = os.path.dirname(fname)
             os.chdir(path)
 
-        proc = subprocess.Popen(["capture.zsh", stripnewline], stdout=subprocess.PIPE)
+        proc = subprocess.Popen(["capture.zsh", self.partial_command], stdout=subprocess.PIPE)
         out = proc.communicate()[0]
         return out.decode("utf-8")
 
@@ -50,7 +51,8 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
     def run(self,edit):
         script = self.view.substr(sublime.Region(0, self.view.size()))
         self.view.run_command("show_scope_name",{})
-        loc = self.view.sel()[0].begin()
+        loc = self.view.sel()[0].end()
+        logger.debug("Cursor position: %s"%loc)
 
         regex = re.compile(
             r'^[^#][\w\s]+(.+\\\s*\n)*'
@@ -63,17 +65,15 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
 
             if (loc >= beg) and (loc <= end):
                 current_command = prog_instance.group(0)
-                # print ("%s - %s"%(beg, end))
-                # print (current_command)
                 zsh_captures = self.command_till_loc(current_command,loc-beg)
                 self.capture_list = zsh_captures.split('\r\n')
                 prefix = script[loc-5:loc]
-
                 # complist = [("%s: %s"%(prefix, x), x) for x in capture_list]
 
                 sublime.active_window().show_quick_panel(self.capture_list,self.on_done)
 
     def on_done(self, index):
+        # new_command = self.current_command + self.capture_list[index] # attempt to be more shell like
         self.view.run_command("insert_my_text", {"args":{'text':self.capture_list[index]}})
 
 
@@ -140,7 +140,7 @@ class InsertFileNameCommand(sublime_plugin.TextCommand):
 
         sublime.active_window().show_quick_panel(self.complist,self.on_done)
 
-    def on_done(self, index):
+    def on_done(self, index):        
         self.view.run_command("insert_my_text", {"args":{'text':self.complist[index]}})
 
 class InsertMyText(sublime_plugin.TextCommand):
@@ -150,6 +150,19 @@ class InsertMyText(sublime_plugin.TextCommand):
     
     def run(self, edit, args):
         for s in self.view.sel():
+            self.view.replace(edit, s, args['text'])
+
+
+class InsertCmdLine(sublime_plugin.TextCommand):
+    '''
+    Command to insert filename from glob list via InsertFileNameCommand
+    '''
+    
+    def run(self, edit, args):
+        for s in self.view.sel():
+            line = self.view.line(s)
+            print (line)
+            # if s.empty():    
             self.view.replace(edit, s, args['text'])
 
 
