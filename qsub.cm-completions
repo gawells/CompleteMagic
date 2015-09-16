@@ -19,7 +19,8 @@
 		"allcfg":["*.cfg"],
 		"allmsj":["*.msj"],
 		"allcms":["*.cms"],
-		"allcpt":["*.cpt"]
+		"allcpt":["*.cpt"],
+		"allnamd":["*.namd"]
 	}
 }
 

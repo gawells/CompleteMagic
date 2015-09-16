@@ -180,6 +180,7 @@ class ProcessComps(threading.Thread):
         self.result = None
         self.completion_sets = []
         completion_files = sublime.find_resources("*.cm-completions")       
+        logger.debug("reading completion files %s"%completion_files)
 
         for c in completion_files:
             compldata = json.loads(sublime.load_resource(c) )
@@ -195,11 +196,12 @@ class RereadCompletionsCommand(sublime_plugin.TextCommand):
     '''
    
     def run(self, edit):
-        sublime_plugin.reload_plugin("CompleteMagic")
+        sublime_plugin.reload_plugin("CompleteMagic.CompleteMagic")
 
 
 class CompleteMagic(sublime_plugin.EventListener):
     def __init__(self):
+        logger.debug("Initializing")
         updateCompletions = ProcessComps()
         updateCompletions.start()
         self.loadCompletions(updateCompletions)
