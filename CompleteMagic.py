@@ -263,6 +263,7 @@ class CompleteMagic(sublime_plugin.EventListener):
 
         # Trigger glob based autocomplete by typing _-xyz ( = *.xyz)
         if re.search('_-\w{3}',prefix):
+            logger.debug(prefix)
             ext = prefix[-3:]
             logger.debug(path+"/*."+ext)
             glist = glob.glob(path+"/*"+ext+'*')
