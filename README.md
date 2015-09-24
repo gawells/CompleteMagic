@@ -15,7 +15,7 @@ for autocomplete triggers) and running the insert_file_name command.
 ![animation](https://github.com/gawells/CompleteMagic/blob/master/ani.gif)
 
 ### Keybindings
-In order for the auto-complete menu to be triggered when pressing tab you need a corresponding `.sublime-keymap` file to bind the appropriate `CompleteMagic` functions. In this example I use a syntax for `.namd` that is a `source.tcl` derivative:
+In order for the auto-complete menu to be triggered when pressing tab you need a corresponding `Default.sublime-keymap` file to bind the appropriate `CompleteMagic` functions. In this example I use a syntax for `.namd` that is a `source.tcl` derivative:
 ```
 [
 	{ "keys": ["tab"], "command": "tab_into_snippet", "context":
