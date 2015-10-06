@@ -184,6 +184,7 @@ class ProcessComps(threading.Thread):
 
         for c in completion_files:
             compldata = json.loads(sublime.load_resource(c) )
+            # logger.debug(compldata)
             self.completion_sets.append(compldata)
 
         self.result = self.completion_sets
@@ -211,7 +212,7 @@ class CompleteMagic(sublime_plugin.EventListener):
         '''
         Load user defined completions into array
         '''
-        
+
         if thread.is_alive():
             logger.debug("reread is running")
             sublime.set_timeout(lambda: self.loadCompletions(thread),100)            
@@ -219,6 +220,7 @@ class CompleteMagic(sublime_plugin.EventListener):
 
         logger.debug("reread finished")
         self.completion_sets = thread.result
+        logger.debug(self.completion_sets)
 
 
     def read_completions(self, scope):
@@ -247,7 +249,8 @@ class CompleteMagic(sublime_plugin.EventListener):
         if prefix == '':
             return complist
 
-        # Fill autocomplete with .cm-completions derived entries  
+        # Fill autocomplete with .cm-completions derived entries
+        logger.debug(completions['completions'])  
         for fieldname in completions['completions']:            
             if (fieldname.lower().startswith(prefix.lower())):                
                 globchars = set("*?[]|")

@@ -1,5 +1,5 @@
 {
-	"scope" : "source.pbs",
+	"scope" : "source.shell",
 	"completions" : {
 		"PBS" : ["PBS_O_QUEUE",
 		"PBS_QUEUE",
