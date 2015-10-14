@@ -22,7 +22,7 @@ from os.path import basename
 PLUGIN_SETTINGS = sublime.load_settings("CompleteMagic.sublime-settings")
 DEBUG = PLUGIN_SETTINGS.get("debug", False)
 
-logging.basicConfig(format='[CompleteMagic] %(message)s ')
+logging.basicConfig(format='%(message)s ')
 logger = logging.getLogger(__name__)
 
 if (DEBUG):
@@ -52,7 +52,7 @@ class ZshMagicCommand(sublime_plugin.TextCommand):
         script = self.view.substr(sublime.Region(0, self.view.size()))
         self.view.run_command("show_scope_name",{})
         loc = self.view.sel()[0].end()
-        logger.debug("Cursor position: %s"%loc)
+        logger.debug("CompletMagic: Cursor position: %s"%loc)
 
         regex = re.compile(
             r'^[^#][\w\s]+(.+\\\s*\n)*'
@@ -107,7 +107,7 @@ class TabIntoSnippetCommand(sublime_plugin.TextCommand):
     '''
     
     def run(self, edit):
-        logger.debug("*** Tab into snippet ***")
+        logger.debug("CompletMagic: *** Tab into snippet ***")
         self.view.run_command("commit_completion", {})
         self.view.run_command("auto_complete", {
             'disable_auto_insert': True, 
@@ -180,7 +180,7 @@ class ProcessComps(threading.Thread):
         self.result = None
         self.completion_sets = []
         completion_files = sublime.find_resources("*.cm-completions")       
-        logger.debug("reading completion files %s"%completion_files)
+        logger.debug("CompletMagic: reading completion files %s"%completion_files)
 
         for c in completion_files:
             compldata = json.loads(sublime.load_resource(c) )
@@ -202,7 +202,7 @@ class RereadCompletionsCommand(sublime_plugin.TextCommand):
 
 class CompleteMagic(sublime_plugin.EventListener):
     def __init__(self):
-        logger.debug("Initializing")
+        logger.debug("CompletMagic: Initializing")
         updateCompletions = ProcessComps()
         updateCompletions.start()
         self.loadCompletions(updateCompletions)
@@ -214,13 +214,13 @@ class CompleteMagic(sublime_plugin.EventListener):
         '''
 
         if thread.is_alive():
-            logger.debug("reread is running")
+            logger.debug("CompletMagic: reread is running")
             sublime.set_timeout(lambda: self.loadCompletions(thread),100)            
             return
 
-        logger.debug("reread finished")
+        logger.debug("CompletMagic: reread finished")
         self.completion_sets = thread.result
-        logger.debug(self.completion_sets)
+        # logger.debug(self.completion_sets)
 
 
     def read_completions(self, scope):
@@ -229,6 +229,8 @@ class CompleteMagic(sublime_plugin.EventListener):
         '''        
 
         for c in self.completion_sets:
+            # logger.debug("CompletMagic: 1"+c['scope'])
+            # logger.debug("CompletMagic: 2"+scope)
             if c['scope'] in scope:
                 return c
 
@@ -250,7 +252,7 @@ class CompleteMagic(sublime_plugin.EventListener):
             return complist
 
         # Fill autocomplete with .cm-completions derived entries
-        logger.debug(completions['completions'])  
+        logger.debug("CompleteMagic: "+str(completions['completions']))  
         for fieldname in completions['completions']:            
             if (fieldname.lower().startswith(prefix.lower())):                
                 globchars = set("*?[]|")
@@ -266,12 +268,11 @@ class CompleteMagic(sublime_plugin.EventListener):
 
         # Trigger glob based autocomplete by typing _-xyz ( = *.xyz)
         if re.search('_-\w{3}',prefix):
-            logger.debug(prefix)
+            logger.debug("CompleteMagic: "+prefix)
             ext = prefix[-3:]
-            logger.debug(path+"/*."+ext)
+            logger.debug("CompleteMagic: "+path+"/*."+ext)
             glist = glob.glob(path+"/*"+ext+'*')
             complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
-
 
         return complist
 
@@ -284,6 +285,7 @@ class CompleteMagic(sublime_plugin.EventListener):
         path = './'
         scope_name = view.scope_name(0)   
         compldata = self.read_completions(scope_name)
+        logger.debug("CompleteMagic: "+str(compldata))
         fname = view.file_name()
         if fname:
             path = os.path.dirname(fname)
