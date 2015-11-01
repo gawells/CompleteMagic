@@ -45,7 +45,7 @@ The following completions operate in conjunction with a snippet designed for tor
 ```
 
 #### Snippet example
-An example snippet that triggers the completions described above. Take note of the `#${n:endsnippet}` field, which the plugin uses to prevent a popup being triggered when tabbing out of snippet (Otherwise Sublime pops up a list using it's own internal completion logic for an empty string).
+An example snippet that triggers the completions described above. Take note of the `#${n:endsnip}` field, which the plugin uses to prevent a popup being triggered when tabbing out of snippet (Otherwise Sublime pops up a list using it's own internal completion logic for an empty string).
 ```
 <snippet>
         <content><![CDATA[
