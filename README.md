@@ -13,7 +13,7 @@ for autocomplete triggers) and running the insert_file_name command.
 ![animation](https://github.com/gawells/demos/blob/master/complM-demo1.gif)
 
 ### .cm-completions examples
-The following completions operate in conjunction with a snippet designed for torque/maui batch queue submission, stored in something like `<sublime-user-config>/Packages/User/CustomCompletions/qsub.cm-completions`. The scope `source.pbs` is derived from `source.shell` but with the `.pbs` file extension.
+The following completions operate in conjunction with a snippet designed for torque/maui batch queue submission, stored in something like `<sublime-user-config>/Packages/User/CustomCompletions/qsub.cm-completions`. The scope `source.pbs` is derived from `source.shell` to use the `.pbs` file extension.
 
 #### Completions file
 ```
@@ -76,37 +76,40 @@ export SCHRODINGER_TMPDIR=/home/user/dscratch
 ```
 
 ### Keybindings
-In order for the auto-complete menu to be triggered when pressing tab you need a corresponding `Default.sublime-keymap` file to bind the appropriate `CompleteMagic` functions. In this example I use a syntax for `.namd` that is a `source.tcl` derivative:
+In order for the auto-complete menu to be triggered when pressing tab you need a corresponding `Default.sublime-keymap` file to bind the appropriate `CompleteMagic` functions. In this example I use a syntax for `.pbs` that is a `source.shell` derivative:
 ```
-[
-	{ "keys": ["tab"], "command": "tab_into_snippet", "context":
-		[
-			// { "key": "has_prev_field", "operator": "equal", "operand": false },
-			// Prevent triggering of second autocomplete when last inserted word
-			// matches snippet trigger etc
-			{ "key": "auto_complete_visible" },
-			{ "key": "setting.auto_complete_commit_on_tab" },
-			{ "key": "selector", "operator": "equal", "operand": "source.namd"}
-		]
-	},
+[                                                                                                                                                  
+        { "keys": ["tab"], "command": "tab_into_snippet", "context":
+            [
+                    { "key": "auto_complete_visible" },
+                    { "key": "setting.auto_complete_commit_on_tab" },
+                    { "key": "selector", "operator": "equal", "operand": "source.pb"s}
+            ]
+        },
 
-	{ "keys": ["tab"], "command": "commit_next_field", "context":
-		[
-			{ "key": "has_next_field", "operator": "equal", "operand": true },
-			{ "key": "selector", "operator": "equal", "operand": "source.namd"},
-			{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
-		]
-	},
+        { "keys": ["tab"], "command": "commit_next_field", "context":
+            [
+                    { "key": "has_next_field", "operator": "equal", "operand": true },
+                    { "key": "selector", "operator": "equal", "operand": "source.pbs"},
+                    { "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
+                    { "key": "selector", "operator": "equal", "operand": "source.pb"s}
+            ]
+        },
 
-	{ "keys": ["enter"], "command": "commit_completion", "context":
-		[
-			{ "key": "auto_complete_visible" },
-			{ "key": "setting.auto_complete_commit_on_tab"}
-		]
-	},
-	
-	{ "keys": ["ctrl+alt+i"], "command": "insert_file_name"},
-
+        { "keys": ["enter"], "command": "commit_completion", "context":
+            [
+                    { "key": "auto_complete_visible" },
+                    { "key": "setting.auto_complete_commit_on_tab"}
+                    { "key": "selector", "operator": "equal", "operand": "source.pb"s}
+            ]
+        },
+        
+        { "keys": ["ctrl+alt+i"], "command": "insert_file_name"
+    		[
+    			{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
+    		]
+        },
 ]
+
 ```
 
