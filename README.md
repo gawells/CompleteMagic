@@ -12,7 +12,7 @@ for autocomplete triggers) and running the insert_file_name command.
 
 ![animation](https://github.com/gawells/demos/blob/master/complM-demo1.gif)
 
-### .cm-completions examples
+### .cm-completions example
 The following completions operate in conjunction with a snippet designed for torque/maui batch queue submission, stored in something like `<sublime-user-config>/Packages/User/CustomCompletions/qsub.cm-completions`. The scope `source.pbs` is derived from `source.shell` to use the `.pbs` file extension.
 
 #### Completions file
@@ -46,7 +46,8 @@ The following completions operate in conjunction with a snippet designed for tor
 
 ```
 
-#### Snippet
+#### Snippet example
+An example snippet that triggers the completions described above. Take note of the `#${n:endsnippet}` field, which the plugin uses to prevent a popup being triggered when tabbing out of snippet (Otherwise Sublime pops up a list using it's own internal completion logic for an empty string).
 ```
 <snippet>
         <content><![CDATA[
@@ -76,7 +77,7 @@ export SCHRODINGER_TMPDIR=/home/user/dscratch
 ```
 
 ### Keybindings
-In order for the auto-complete menu to be triggered when pressing tab you need a corresponding `Default.sublime-keymap` file to bind the appropriate `CompleteMagic` functions. In this example I use a syntax for `.pbs` that is a `source.shell` derivative:
+In order for the auto-complete menu to be triggered when pressing tab you need a corresponding `Default.sublime-keymap` file to bind the appropriate `CompleteMagic` functions. In this example I use a syntax for `.pbs` that is a `source.shell` derivative (saved in `<sublime-user-config>/Packages/User/pbs`):
 ```
 [                                                                                                                                                  
         { "keys": ["tab"], "command": "tab_into_snippet", "context":
