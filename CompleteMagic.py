@@ -135,10 +135,13 @@ class InsertFileNameCommand(sublime_plugin.TextCommand):
         if not any((c in globchars) for c in sel) :
             glist = glob.glob("%s/*%s*"%(path,sel))        
         else:
-            glist = glob.glob("%s/%s"%(path,sel))         
-        self.complist = [basename(x) for x in glist]
+            glist = glob.glob("%s/%s"%(path,sel))
 
-        sublime.active_window().show_quick_panel(self.complist,self.on_done)
+        if path != "./":         
+            self.complist = [basename(x) for x in glist]
+            sublime.active_window().show_quick_panel(self.complist,self.on_done)
+        else:
+            logger.debug("CompletMagic: No path, save file first")
 
     def on_done(self, index):        
         self.view.run_command("insert_my_text", {"args":{'text':self.complist[index]}})
@@ -270,10 +273,13 @@ class CompleteMagic(sublime_plugin.EventListener):
         if re.search('_-\w{3}',prefix):
             logger.debug("CompleteMagic: "+prefix)
             ext = prefix[-3:]
-            logger.debug("CompleteMagic: "+path+"/*."+ext)
-            glist = glob.glob(path+"/*"+ext+'*')
-            complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
-
+            if path != "./":
+                logger.debug("CompleteMagic: "+path+"/*."+ext)
+                glist = glob.glob(path+"/*"+ext+'*')
+                complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
+            else:
+                logger.debug("CompletMagic: No Path, save file first")
+            
         return complist
 
                 
@@ -289,7 +295,7 @@ class CompleteMagic(sublime_plugin.EventListener):
         fname = view.file_name()
         if fname:
             path = os.path.dirname(fname)
-        
+
         if compldata:           
             clist = self.populate_autocomplete(prefix, compldata, path)
             return clist
