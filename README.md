@@ -4,7 +4,7 @@ Sublime Text 3 plugin for custom autocomplete lists.
 
 In addition to generating boilerplate code, snippets are useful for generating input files for scientific software and batch queue submissions. However, I wanted to be able to select from predefined lists during snippet completion, and Sublime only allows for one default value in a field. Hence this plugin: placeholder values for snippet fields are used to trigger custom autocomplete lists via api-injection. Custom lists are stored in json formatted files with the `.cm-completions` extension as `"prefix":[array]` pairs. As you tab into each field of a snippet, the autocomplete popup is triggered with the appropriate custom list. These lists will be triggered during normal typing as well, therefore it may be more convenient to limit them to custom scope definitions (see below)
 
-Additional functionality includes the insertion of filenames from the current directory, either by entering: `\_-xyz` which will glob for **xyz*) or by selecting a more complex pattern (sublime only recognises alphanumeric + "_" for autocomplete triggers) and running the `insert_file_name command`.
+Additional functionality includes the insertion of filenames from the current directory, either by entering: `_-xyz` which will glob for **xyz*) or by selecting a more complex pattern (sublime only recognises alphanumeric + "_" for autocomplete triggers) and running the `insert_file_name command`.
 
 ### Demo
 
