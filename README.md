@@ -49,26 +49,21 @@ An example snippet that triggers the completions described above. Take note of t
 ```
 <snippet>
         <content><![CDATA[
-export SCHRODINGER_RSH=/usr/bin/ssh
-export SCHRODINGER_RCP=/usr/bin/scp
-export SCHRODINGER=/opt/Desmond_2014.2
-export SCHRODINGER_NICE=yes
-export SCHRODINGER_TMPDIR=/home/user/dscratch
+#PBS -N ${1:jobname}
+#PBS -e ${1:jobname}.err
+#PBS -o ${1:jobname}.out
+#PBS -l nodes=${2:nodenumber}:ppn=${3:ppnnumber}
+#PBS -l walltime=${4:jobtimedays}:${5:jobtimehours}:00:00
 
-\$SCHRODINGER/utilities/multisim -WAIT \\
-        -JOBNAME ${1:runmsj} \\
-        -HOST ${2:localhost} \\
-        -cpu ${3:\$PBS_NUM_PPN} \\
-        -mode umbrella \\
-        -m ${4:allmsj} \\
-        ${5:allcms} \\
-        -o ${1}-out.cms
+cd \$PBS_O_WORKDIR
+uname -a
+env | sort
 
 #${6:endsnip}
+
 ]]></content>
-        <!-- <tabTrigger>desmond-msj</tabTrigger> -->
         <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-        <tabTrigger>msj_caf</tabTrigger>
+        <tabTrigger>qsub_caf</tabTrigger>
         <!-- Optional: Set a scope to limit where the snippet will trigger -->
         <scope>source.pbs</scope>
 </snippet>
