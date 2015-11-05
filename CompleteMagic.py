@@ -228,13 +228,20 @@ class CompleteMagic(sublime_plugin.EventListener):
         Return completion set for current scope
         '''        
 
+        completions = []
+
         for c in self.completion_sets:
             # logger.debug("CompletMagic: 1"+c['scope'])
             # logger.debug("CompletMagic: 2"+scope)
             if c['scope'] in scope:
-                return c
+                logger.debug("CompletMagic: %s"%c['scope'])
+                completions.append(c)
+                # return c
 
-        return False
+        if len(completions ) > 0:
+            return completions
+        else:
+            return False
 
 
     def isFile(self, fname):        
@@ -289,8 +296,14 @@ class CompleteMagic(sublime_plugin.EventListener):
         fname = view.file_name()
         if fname:
             path = os.path.dirname(fname)
+
+        clist = []
         
         if compldata:           
-            clist = self.populate_autocomplete(prefix, compldata, path)
+            # clist = self.populate_autocomplete(prefix, compldata, path)
+            for compl in compldata:
+                clist +=  self.populate_autocomplete(prefix, compl, path)
+            
+            logger.debug(clist)
             return clist
 
