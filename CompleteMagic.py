@@ -183,6 +183,7 @@ class ProcessComps(threading.Thread):
         logger.debug("CompletMagic: reading completion files %s"%completion_files)
 
         for c in completion_files:
+            logger.debug("CompletMagic, loading completion set: "+c)
             compldata = json.loads(sublime.load_resource(c) )
             # logger.debug(compldata)
             self.completion_sets.append(compldata)

@@ -11,9 +11,9 @@ Additional functionality includes the insertion of filenames from the current di
 ![animation](https://github.com/gawells/demos/blob/master/complM-demo1.gif)
 
 ### .cm-completions example
-The following completions operate in conjunction with a snippet designed for torque/maui batch queue submission, stored in something like `<sublime-user-config>/Packages/User/CustomCompletions/qsub.cm-completions`. The scope `source.pbs` is derived from `source.shell` to use the `.pbs` file extension.
+The following completions operate in conjunction with a snippet designed for torque/maui batch queue submission, stored in something like `<sublime-user-config>/Packages/User/CustomCompletions/qsub.cm-completions`. The scope `source.pbs` is derived from `source.shell` to use the `.pbs` file extension. Completion lists for the same syntax/scope can be split across multiple files.
 
-#### Completions file
+#### Completions file example
 ```
 {
         "scope" : "source.pbs",
