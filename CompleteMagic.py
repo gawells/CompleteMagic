@@ -129,14 +129,22 @@ class InsertFileNameCommand(sublime_plugin.TextCommand):
 
         path = './'
         fname = self.view.file_name()
-        if fname:
+        absolute = False
+        if sel[0] == '/': 
+            path = ''
+            absolute = True
+        elif fname:
             path = os.path.dirname(fname)
 
         if not any((c in globchars) for c in sel) :
             glist = glob.glob("%s/*%s*"%(path,sel))        
         else:
-            glist = glob.glob("%s/%s"%(path,sel))         
-        self.complist = [basename(x) for x in glist]
+            glist = glob.glob("%s/%s"%(path,sel)) 
+        
+        if absolute:            
+            self.complist = [re.sub('\/+','/',x)  for x in glist]
+        else:        
+            self.complist = [os.path.relpath(x,path)+basename(x) for x in glist]
 
         sublime.active_window().show_quick_panel(self.complist,self.on_done)
 
