@@ -232,10 +232,8 @@ class CompleteMagic(sublime_plugin.EventListener):
         completions = []
 
         for c in self.completion_sets:
-            # logger.debug("CompletMagic: 1"+c['scope'])
-            # logger.debug("CompletMagic: 2"+scope)
             if c['scope'] in scope:
-                logger.debug("CompletMagic: %s"%c['scope'])
+                logger.debug("CompletMagic, scope: %s"%c['scope'])
                 completions.append(c)
                 # return c
 
@@ -260,7 +258,6 @@ class CompleteMagic(sublime_plugin.EventListener):
             return complist
 
         # Fill autocomplete with .cm-completions derived entries
-        logger.debug("CompleteMagic: "+str(completions['completions']))  
         for fieldname in completions['completions']:            
             if (fieldname.lower().startswith(prefix.lower())):                
                 globchars = set("*?[]|")
@@ -273,13 +270,14 @@ class CompleteMagic(sublime_plugin.EventListener):
                         glist = glob.glob(path+"/"+completion)
                         complist = complist + [("%s\t%s"%
                             (fieldname, basename(x)), basename(x)) for x in glist]
+                
+                logger.debug("CompleteMagic, predefined: "+str(complist))  
 
         # Trigger glob based autocomplete by typing _-xyz ( = *.xyz)
         if re.search('_-\w{3}',prefix):
-            logger.debug("CompleteMagic: "+prefix)
             ext = prefix[-3:]
-            logger.debug("CompleteMagic: "+path+"/*."+ext)
             glist = glob.glob(path+"/*"+ext+'*')
+            logger.debug("CompleteMagic: glob insertion from %s -> %s"%(path,glist))
             complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
 
         return complist
@@ -293,7 +291,7 @@ class CompleteMagic(sublime_plugin.EventListener):
         path = './'
         scope_name = view.scope_name(0)   
         compldata = self.read_completions(scope_name)
-        logger.debug("CompleteMagic: "+str(compldata))
+        logger.debug("CompleteMagic, all completions: "+str(compldata))
         fname = view.file_name()
         if fname:
             path = os.path.dirname(fname)
@@ -301,10 +299,8 @@ class CompleteMagic(sublime_plugin.EventListener):
         clist = []
         
         if compldata:           
-            # clist = self.populate_autocomplete(prefix, compldata, path)
             for compl in compldata:
                 clist +=  self.populate_autocomplete(prefix, compl, path)
             
-            logger.debug(clist)
             return clist
 
