@@ -100,6 +100,7 @@ In order for the auto-complete menu to be triggered when pressing tab you need a
         
         { "keys": ["super+alt+i"], "command": "insert_file_name"},
         { "keys": ["ctrl+c","ctrl+r"], "command":"reread_completions"}
+
 ]
 
 ```
