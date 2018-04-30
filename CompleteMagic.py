@@ -144,7 +144,8 @@ class InsertFileNameCommand(sublime_plugin.TextCommand):
         if absolute:            
             self.complist = [re.sub('\/+','/',x)  for x in glist]
         else:        
-            self.complist = [os.path.relpath(x,path)+basename(x) for x in glist]
+            self.complist = [os.path.relpath(x,path) for x in glist]
+            # self.complist = [os.path.relpath(x,path)+basename(x) for x in glist]
 
         sublime.active_window().show_quick_panel(self.complist,self.on_done)
 

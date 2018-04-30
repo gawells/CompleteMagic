@@ -1,27 +1,28 @@
 [
-	{ "keys": ["tab"], "command": "tab_into_snippet", "context":
-		[
-			{ "key": "auto_complete_visible" },
-			{ "key": "setting.auto_complete_commit_on_tab" },
-			{ "key": "selector", "operator": "equal", "operand": "source.shell"}
-		]
-	},
+	// { "keys": ["tab"], "command": "tab_into_snippet", "context":
+	// 	[
+	// 		{ "key": "auto_complete_visible" },
+	// 		{ "key": "setting.auto_complete_commit_on_tab" },
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.shell"}
+	// 	]
+	// },
 
-	{ "keys": ["tab"], "command": "commit_next_field", "context":
-		[
-			{ "key": "has_next_field", "operator": "equal", "operand": true },
-			{ "key": "selector", "operator": "equal", "operand": "source.shell"},
-			{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
-		]
-	},
+	// { "keys": ["tab"], "command": "commit_next_field", "context":
+	// 	[
+	// 		{ "key": "has_next_field", "operator": "equal", "operand": true },
+	// 		{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.shell"}
+	// 	]
+	// },
 
-	{ "keys": ["enter"], "command": "commit_completion", "context":
-		[
-			{ "key": "auto_complete_visible" },
-			{ "key": "setting.auto_complete_commit_on_tab"}
-		]
-	},
+	// { "keys": ["enter"], "command": "commit_completion", "context":
+	// 	[
+	// 		{ "key": "auto_complete_visible" },
+	// 		{ "key": "setting.auto_complete_commit_on_tab"},
+	// 		{ "key": "selector", "operator": "equal", "operand": "source.shell"}
+	// 	]
+	// },
 	
 	{ "keys": ["super+alt+i"], "command": "insert_file_name"},
-
+	{ "keys": ["ctrl+c","ctrl+r"], "command":"reread_completions"}
 ]
