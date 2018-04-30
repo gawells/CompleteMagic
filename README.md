@@ -77,7 +77,7 @@ In order for the auto-complete menu to be triggered when pressing tab you need a
             [
                     { "key": "auto_complete_visible" },
                     { "key": "setting.auto_complete_commit_on_tab" },
-                    { "key": "selector", "operator": "equal", "operand": "source.pb"s}
+                    { "key": "selector", "operator": "equal", "operand": "source.pbs"}
             ]
         },
 
@@ -86,7 +86,7 @@ In order for the auto-complete menu to be triggered when pressing tab you need a
                     { "key": "has_next_field", "operator": "equal", "operand": true },
                     { "key": "selector", "operator": "equal", "operand": "source.pbs"},
                     { "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
-                    { "key": "selector", "operator": "equal", "operand": "source.pb"s}
+                    { "key": "selector", "operator": "equal", "operand": "source.pbs"}
             ]
         },
 
@@ -94,15 +94,12 @@ In order for the auto-complete menu to be triggered when pressing tab you need a
             [
                     { "key": "auto_complete_visible" },
                     { "key": "setting.auto_complete_commit_on_tab"}
-                    { "key": "selector", "operator": "equal", "operand": "source.pb"s}
+                    { "key": "selector", "operator": "equal", "operand": "source.pbs"}
             ]
         },
         
-        { "keys": ["ctrl+alt+i"], "command": "insert_file_name"
-    		[
-    			{ "key": "selector", "operator": "equal", "operand": "source.pbs"}
-    		]
-        },
+        { "keys": ["super+alt+i"], "command": "insert_file_name"},
+        { "keys": ["ctrl+c","ctrl+r"], "command":"reread_completions"}
 ]
 
 ```
