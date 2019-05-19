@@ -3,7 +3,7 @@
 	// 	[
 	// 		{ "key": "auto_complete_visible" },
 	// 		{ "key": "setting.auto_complete_commit_on_tab" },
-	// 		{ "key": "selector", "operator": "equal", "operand": "source.shell"}
+	// 		{ "key": "selector", "operator": "equal", "operand": "<scope name>"}
 	// 	]
 	// },
 
@@ -11,7 +11,7 @@
 	// 	[
 	// 		{ "key": "has_next_field", "operator": "equal", "operand": true },
 	// 		{ "key": "text", "operator": "not_regex_contains", "operand": "endsnip"},
-	// 		{ "key": "selector", "operator": "equal", "operand": "source.shell"}
+	// 		{ "key": "selector", "operator": "equal", "operand": "<scope name>"}
 	// 	]
 	// },
 
@@ -19,10 +19,10 @@
 	// 	[
 	// 		{ "key": "auto_complete_visible" },
 	// 		{ "key": "setting.auto_complete_commit_on_tab"},
-	// 		{ "key": "selector", "operator": "equal", "operand": "source.shell"}
+	// 		{ "key": "selector", "operator": "equal", "operand": "<scope name>"}
 	// 	]
 	// },
 	
-	{ "keys": ["super+alt+i"], "command": "insert_file_name"},
-	{ "keys": ["ctrl+c","ctrl+r"], "command":"reread_completions"}
+	// { "keys": ["super+alt+i"], "command": "insert_file_name"},
+	// { "keys": ["ctrl+alt+r"], "command":"reread_completions"}
 ]

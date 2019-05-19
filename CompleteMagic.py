@@ -283,8 +283,11 @@ class CompleteMagic(sublime_plugin.EventListener):
                 logger.debug("CompleteMagic, predefined: "+str(complist))  
 
         # Trigger glob based autocomplete by typing _-xyz ( = *.xyz)
-        if re.search('_-\w{3}',prefix):
-            ext = prefix[-3:]
+        # using '_-' because sublime considers them potential word characters, unlike './'
+
+        # if re.search('_-\w{2}',prefix):
+        if re.search('_-\w{2}',prefix):
+            ext = prefix[-2:]
             glist = glob.glob(path+"/*"+ext+'*')
             logger.debug("CompleteMagic: glob insertion from %s -> %s"%(path,glist))
             complist = complist + [("%s: %s"%(prefix, basename(x)), basename(x)) for x in glist]
