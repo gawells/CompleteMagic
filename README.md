@@ -104,4 +104,5 @@ In order for the auto-complete menu to be triggered when pressing tab you need a
 ]
 
 ```
+If you disable the CompleteMagic package you'll have to comment out the second keybinding above for snippets to behave normally in this context.
 
