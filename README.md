@@ -104,5 +104,5 @@ In order for the auto-complete menu to be triggered when pressing tab you need a
 ]
 
 ```
-If you disable the CompleteMagic package you'll have to comment out the second keybinding above for snippets to behave normally in this context. In some cases it may be necesseray to force a re-read of the completions files with C-M-r.
+If you disable the CompleteMagic package you'll have to comment out the second keybinding above for snippets to behave normally in this context. In some cases it may be necesseray to force a re-read of the completions files with ^-c-r.
 
