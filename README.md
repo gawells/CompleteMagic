@@ -99,10 +99,10 @@ In order for the auto-complete menu to be triggered when pressing tab you need a
         },
         
         { "keys": ["super+alt+i"], "command": "insert_file_name"},
-        { "keys": ["ctrl+c","ctrl+r"], "command":"reread_completions"} # force re-read of completions file, sometimes needed on startup or after altering *.cm-completion files
+        { "keys": ["ctrl+c","ctrl+r"], "command":"reread_completions"} 
 
 ]
 
 ```
-If you disable the CompleteMagic package you'll have to comment out the second keybinding above for snippets to behave normally in this context.
+If you disable the CompleteMagic package you'll have to comment out the second keybinding above for snippets to behave normally in this context. In some cases it may be necesseray to force a re-read of the completions files with C-M-r.
 
