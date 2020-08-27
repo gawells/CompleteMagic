@@ -71,7 +71,7 @@ env | sort
 
 ### Keybindings
 In order for the auto-complete menu to be triggered when pressing tab you need a corresponding `Default.sublime-keymap` file to bind the appropriate `CompleteMagic` functions. In this example I use a syntax for `.pbs` that is a `source.shell` derivative (saved in `<sublime-user-config>/Packages/User/pbs`):
-```
+```json
 [                                                                                                                                                  
         { "keys": ["tab"], "command": "tab_into_snippet", "context":
             [
